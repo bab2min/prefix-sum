@@ -412,7 +412,7 @@ inline void avx_sum(float* arr, size_t K)
 }
 #endif
 
-#ifdef __SSE2__
+#if defined(__SSE2__) || defined(_WIN64)
 inline __m128 scan_SSE(__m128 x)
 {
 	x = _mm_add_ps(x, _mm_castsi128_ps(_mm_slli_si128(_mm_castps_si128(x), 4)));
@@ -597,7 +597,7 @@ int main()
 			unroll16_reorder2(arrd.data(), arr_size);
 		}
 
-#ifdef __SSE2__
+#if defined(__SSE2__) || defined(_WIN64)
 		set_arr(arrf);
 		{
 			auto s = bh.measure("sse/float", goldf, arrf);

@@ -142,6 +142,37 @@ void unroll4_reorder1(_Ty* arr, int n)
 }
 
 template<typename _Ty>
+void unroll4_shift(_Ty* arr, int n)
+{
+	int n4 = n & ~3;
+	_Ty acc = 0;
+	for (int i = 0; i < n4; i += 4)
+	{
+		// first accumulation
+		arr[i + 3] += arr[i + 2];
+		arr[i + 2] += arr[i + 1];
+		arr[i + 1] += arr[i];
+
+		// second accumulation
+		arr[i + 3] += arr[i + 1];
+		arr[i + 2] += arr[i];
+		
+		// accumulate offset
+		arr[i] += acc;
+		arr[i + 1] += acc;
+		arr[i + 2] += acc;
+		arr[i + 3] += acc;
+
+		acc = arr[i + 3];
+	}
+
+	for (int i = n4; i < n; ++i)
+	{
+		arr[i] += acc;
+	}
+}
+
+template<typename _Ty>
 void unroll8(_Ty* arr, int n)
 {
 	int n8 = n & ~7;
@@ -221,6 +252,55 @@ void unroll8_reorder2(_Ty* arr, int n)
 		arr[i + 5] += arr[i + 3];
 		arr[i + 6] += arr[i + 3];
 		arr[i + 7] += arr[i + 3];
+
+		acc = arr[i + 7];
+	}
+
+	for (int i = n8; i < n; ++i)
+	{
+		arr[i] += acc;
+	}
+}
+
+template<typename _Ty>
+void unroll8_shift(_Ty* arr, int n)
+{
+	int n8 = n & ~7;
+	_Ty acc = 0;
+	for (int i = 0; i < n8; i += 8)
+	{
+		// first accumulation
+		arr[i + 7] += arr[i + 6];
+		arr[i + 6] += arr[i + 5];
+		arr[i + 5] += arr[i + 4];
+		arr[i + 4] += arr[i + 3];
+		arr[i + 3] += arr[i + 2];
+		arr[i + 2] += arr[i + 1];
+		arr[i + 1] += arr[i];
+		
+		// second accumulation
+		arr[i + 7] += arr[i + 5];
+		arr[i + 6] += arr[i + 4];
+		arr[i + 5] += arr[i + 3];
+		arr[i + 4] += arr[i + 2];
+		arr[i + 3] += arr[i + 1];
+		arr[i + 2] += arr[i];
+		
+		// third accumulation
+		arr[i + 7] += arr[i + 3];
+		arr[i + 6] += arr[i + 2];
+		arr[i + 5] += arr[i + 1];
+		arr[i + 4] += arr[i];
+
+		// accumulate offset
+		arr[i] += acc;
+		arr[i + 1] += acc;
+		arr[i + 2] += acc;
+		arr[i + 3] += acc;
+		arr[i + 4] += acc;
+		arr[i + 5] += acc;
+		arr[i + 6] += acc;
+		arr[i + 7] += acc;
 
 		acc = arr[i + 7];
 	}
@@ -360,8 +440,48 @@ void unroll16_reorder2(_Ty* arr, int n)
 	}
 }
 
+
+#ifdef __AVX2__
+inline __m256 scan_avx2(__m256 x)
+{
+	__m256 t0, zero;
+	zero = _mm256_set1_ps(0);
+	t0 = _mm256_permutevar8x32_ps(x, _mm256_setr_epi32(0, 0, 1, 2, 3, 4, 5, 6));
+	x = _mm256_add_ps(x, _mm256_blend_ps(t0, zero, 0x01));
+
+	t0 = _mm256_permutevar8x32_ps(x, _mm256_setr_epi32(0, 0, 0, 1, 2, 3, 4, 5));
+	x = _mm256_add_ps(x, _mm256_blend_ps(t0, zero, 0x03));
+
+	t0 = _mm256_permutevar8x32_ps(x, _mm256_setr_epi32(0, 0, 0, 0, 0, 1, 2, 3));
+	x = _mm256_add_ps(x, _mm256_blend_ps(t0, zero, 0x0F));
+	return x;
+}
+
+
+inline void avx2_sum(float* arr, int n)
+{
+	int n8 = n & ~7;
+	__m256 offset = _mm256_setzero_ps();
+	for (size_t i = 0; i < n8; i += 8)
+	{
+		__m256 x = _mm256_loadu_ps(&arr[i]);
+		__m256 out = scan_avx2(x);
+		out = _mm256_add_ps(out, offset);
+		_mm256_storeu_ps(&arr[i], out);
+		//broadcast last element
+		offset = _mm256_permutevar8x32_ps(out, _mm256_set1_epi32(7));
+	}
+
+	if (!n8) n8 = 1;
+	for (size_t i = n8; i < n; ++i)
+	{
+		arr[i] += arr[i - 1];
+	}
+}
+#endif
+
 #ifdef __AVX__
-inline __m256 scan_AVX(__m256 x)
+inline __m256 scan_avx(__m256 x)
 {
 	__m256 t0, t1;
 	//shift1_AVX + add
@@ -374,67 +494,65 @@ inline __m256 scan_AVX(__m256 x)
 	// x += [., 0, 1, 2, 3, 4, 5, 6] : [0, 01, 12, 23, 34, 45, 56, 67]
 	//shift2_AVX + add
 	t0 = _mm256_permute_ps(x, _MM_SHUFFLE(1, 0, 3, 2));
+	// t0: [12, 23, 0, 01, 56, 67, 34, 45]
 	t1 = _mm256_permute2f128_ps(t0, t0, 41);
+	// t1: [., ., ., ., 12, 23, 0, 01]
 	x = _mm256_add_ps(x, _mm256_blend_ps(t0, t1, 0x33));
+	// x += [., ., 0, 01, 12, 23, 34, 45] : [0, 01, 012, 0123, 1234, 2345, 3456, 4567]
 	//shift3_AVX + add
 	x = _mm256_add_ps(x, _mm256_permute2f128_ps(x, x, 41));
+	// x += [., ., ., ., 0, 01, 012, 0123] : [0, 01, 012, 0123, 01234, 012345, 0123456, 01234567]
 	return x;
 }
 
-inline void prefix_sum_AVX(float* a, size_t n)
+inline void avx_sum(float* arr, int n)
 {
+	int n8 = n & ~7;
 	__m256 offset = _mm256_setzero_ps();
-	for (size_t i = 0; i < n; i += 8)
+	for (size_t i = 0; i < n8; i += 8)
 	{
-		__m256 x = _mm256_loadu_ps(&a[i]);
-		__m256 out = scan_AVX(x);
+		__m256 x = _mm256_loadu_ps(&arr[i]);
+		__m256 out = scan_avx(x);
 		out = _mm256_add_ps(out, offset);
-		_mm256_storeu_ps(&a[i], out);
+		_mm256_storeu_ps(&arr[i], out);
 		//broadcast last element
 		__m256 t0 = _mm256_permute2f128_ps(out, out, 0x11);
 		offset = _mm256_permute_ps(t0, 0xff);
 	}
-}
 
-inline void avx_sum(float* arr, size_t K)
-{
-	size_t Kf = (K >> 3) << 3;
-	if (Kf) prefix_sum_AVX(arr, Kf);
-	else Kf = 1;
-	for (size_t i = Kf; i < K; ++i)
+	if (!n8) n8 = 1;
+	for (size_t i = n8; i < n; ++i)
 	{
 		arr[i] += arr[i - 1];
 	}
 }
 #endif
 
-#ifdef __SSE2__
-inline __m128 scan_SSE(__m128 x)
+#if defined(__SSE2__) || defined(_WIN64)
+inline __m128 scan_sse(__m128 x)
 {
+	// x: [0, 1, 2, 3]
 	x = _mm_add_ps(x, _mm_castsi128_ps(_mm_slli_si128(_mm_castps_si128(x), 4)));
+	// x: [0, 01, 12, 23]
 	x = _mm_add_ps(x, _mm_castsi128_ps(_mm_slli_si128(_mm_castps_si128(x), 8)));
+	// x: [0, 01, 012, 0123]
 	return x;
 }
 
-inline void prefix_sum_SSE(float* a, size_t n)
+inline void sse_sum(float* arr, int n)
 {
+	int n4 = n & ~3;
 	__m128 offset = _mm_setzero_ps();
-	for (size_t i = 0; i < n; i += 4)
+	for (int i = 0; i < n4; i += 4)
 	{
-		__m128 x = _mm_load_ps(&a[i]);
-		__m128 out = scan_SSE(x);
+		__m128 x = _mm_load_ps(&arr[i]);
+		__m128 out = scan_sse(x);
 		out = _mm_add_ps(out, offset);
-		_mm_store_ps(&a[i], out);
+		_mm_store_ps(&arr[i], out);
 		offset = _mm_shuffle_ps(out, out, _MM_SHUFFLE(3, 3, 3, 3));
 	}
-}
-
-inline void sse_sum(float* arr, size_t K)
-{
-	size_t Kf = (K >> 2) << 2;
-	if (Kf) prefix_sum_SSE(arr, Kf);
-	else Kf = 1;
-	for (size_t i = Kf; i < K; ++i)
+	if (!n4) n4 = 1;
+	for (size_t i = n4; i < n; ++i)
 	{
 		arr[i] += arr[i - 1];
 	}
@@ -511,6 +629,12 @@ int main()
 
 		set_arr(arrf);
 		{
+			auto s = bh.measure("unroll4_shift/float", goldf, arrf);
+			unroll4_shift(arrf.data(), arr_size);
+		}
+
+		set_arr(arrf);
+		{
 			auto s = bh.measure("unroll8_reorder1/float", goldf, arrf);
 			unroll8_reorder1(arrf.data(), arr_size);
 		}
@@ -519,6 +643,12 @@ int main()
 		{
 			auto s = bh.measure("unroll8_reorder2/float", goldf, arrf);
 			unroll8_reorder2(arrf.data(), arr_size);
+		}
+
+		set_arr(arrf);
+		{
+			auto s = bh.measure("unroll8_shift/float", goldf, arrf);
+			unroll8_shift(arrf.data(), arr_size);
 		}
 
 		set_arr(arrf);
@@ -571,6 +701,12 @@ int main()
 
 		set_arr(arrd);
 		{
+			auto s = bh.measure("unroll4_shift/double", goldd, arrd);
+			unroll4_shift(arrd.data(), arr_size);
+		}
+
+		set_arr(arrd);
+		{
 			auto s = bh.measure("unroll8_reorder1/double", goldd, arrd);
 			unroll8_reorder1(arrd.data(), arr_size);
 		}
@@ -579,6 +715,12 @@ int main()
 		{
 			auto s = bh.measure("unroll8_reorder2/double", goldd, arrd);
 			unroll8_reorder2(arrd.data(), arr_size);
+		}
+
+		set_arr(arrd);
+		{
+			auto s = bh.measure("unroll8_shift/double", goldd, arrd);
+			unroll8_shift(arrd.data(), arr_size);
 		}
 
 		set_arr(arrd);
@@ -593,7 +735,7 @@ int main()
 			unroll16_reorder2(arrd.data(), arr_size);
 		}
 
-#ifdef __SSE2__
+#if defined(__SSE2__) || defined(_WIN64)
 		set_arr(arrf);
 		{
 			auto s = bh.measure("sse/float", goldf, arrf);
@@ -606,6 +748,14 @@ int main()
 		{
 			auto s = bh.measure("avx/float", goldf, arrf);
 			avx_sum(arrf.data(), arr_size);
+		}
+#endif
+
+#ifdef __AVX2__
+		set_arr(arrf);
+		{
+			auto s = bh.measure("avx2/float", goldf, arrf);
+			avx2_sum(arrf.data(), arr_size);
 		}
 #endif
 	}

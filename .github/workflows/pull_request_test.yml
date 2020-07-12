@@ -1,0 +1,69 @@
+name: Pull Request Test
+
+on: 
+  pull_request:
+    branches: 
+      - main
+
+jobs:
+  build_linux:
+    name: Build for linux
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 4
+      matrix:
+        arch: [msse2, mavx]
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
+    steps:        
+    - uses: actions/checkout@v1
+    - name: Build Bench
+      run: |
+        g++ -std=c++11 -g -O3 -${{ matrix.arch }} -DNDEBUG main.cpp -o bench.out
+    - name: System Info
+      run: |
+        cat /proc/cpuinfo
+        g++ -v
+    - name: Run Bench
+      run: |
+        ./bench.out
+
+  build_macos:
+    name: Build for macOS
+    runs-on: macOS-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        arch: [msse2, mavx]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build Bench
+      run: |
+        g++ -std=c++11 -g -O3 -${{ matrix.arch }} -DNDEBUG main.cpp -o bench.out
+    - name: System Info
+      run: |
+        sysctl -a | grep machdep.cpu
+        g++ -v
+    - name: Run Bench
+      run: |
+        ./bench.out
+
+  build_windows:
+    name: Build for Windows
+    runs-on: windows-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        arch: ['/arch:SSE2', '/arch:AVX']
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ilammy/msvc-dev-cmd@v1
+    - name: Build Bench
+      run: |
+        cl.exe /O2 ${{ matrix.arch }} /D "NDEBUG" /Fe:bench.exe .\main.cpp
+    - name: System Info
+      run: |
+        bash -c "cat /proc/cpuinfo"
+        cl.exe
+    - name: Run Bench
+      run: |
+        .\bench.exe

@@ -14,6 +14,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <th colspan="2">msvc 19.26</th>
   <th rowspan="2">Avg SpeedUp</th>
   <th rowspan="2">MAE</th>
+  <th rowspan="2"></th>
  </tr>
  <tr>
   <th>Time(sec)</th>
@@ -42,6 +43,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>0%</td>
   <td>0%</td>
   <td>2.037</td>
+  <th>simple(baseline)</th>
  </tr>
  <tr>
   <th>simple_double</th>
@@ -57,6 +59,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>8%</td>
   <td>-11%</td>
   <td>-</td>
+  <th>simple_double</th>
  </tr>
  <tr>
   <th>sse</th>
@@ -72,6 +75,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>225%</td>
   <td>172%</td>
   <td>0.683</td>
+  <th>sse</th>
  </tr>
  <tr>
   <th>kahan</th>
@@ -87,6 +91,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>-70%</td>
   <td>-73%</td>
   <td>0.000</td>
+  <th>kahan</th>
  </tr>
  <tr>
   <th>unroll4</th>
@@ -102,6 +107,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>23%</td>
   <td>9%</td>
   <td>2.037</td>
+  <th>unroll4</th>
  </tr>
  <tr>
   <th>unroll4_reorder1</th>
@@ -117,6 +123,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>52%</td>
   <td>36%</td>
   <td>0.768</td>
+  <th>unroll4_reorder1</th>
  </tr>
  <tr>
   <th>unroll4_shift</th>
@@ -132,6 +139,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>36%</td>
   <td>57%</td>
   <td>0.683</td>
+  <th>unroll4_shift</th>
  </tr>
  <tr>
   <th>unroll8</th>
@@ -147,6 +155,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>19%</td>
   <td>7%</td>
   <td>2.037</td>
+  <th>unroll8</th>
  </tr>
  <tr>
   <th>unroll8_reorder1</th>
@@ -162,6 +171,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>60%</td>
   <td>44%</td>
   <td>1.160</td>
+  <th>unroll8_reorder1</th>
  </tr>
  <tr>
   <th>unroll8_reorder2</th>
@@ -177,6 +187,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>80%</td>
   <td>55%</td>
   <td>0.833</td>
+  <th>unroll8_reorder2</th>
  </tr>
  <tr>
   <th>unroll8_shift</th>
@@ -192,6 +203,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>-4%</td>
   <td>23%</td>
   <td>0.344</td>
+  <th>unroll8_shift</th>
  </tr>
  <tr>
   <th>unroll16</th>
@@ -207,6 +219,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>20%</td>
   <td>8%</td>
   <td>2.037</td>
+  <th>unroll16</th>
  </tr>
  <tr>
   <th>unroll16_reorder1</th>
@@ -222,6 +235,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>71%</td>
   <td>52%</td>
   <td>1.198</td>
+  <th>unroll16_reorder1</th>
  </tr>
  <tr>
   <th>unroll16_reorder2</th>
@@ -237,6 +251,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>47%</td>
   <td>65%</td>
   <td>2.277</td>
+  <th>unroll16_reorder2</th>
  </tr>
  <tr>
   <th rowspan="12">double</th>
@@ -253,6 +268,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>0%</td>
   <td>0%</td>
   <td>2.037</td>
+  <th>simple(baseline)</th>
  </tr>
  <tr>
   <th>kahan</th>
@@ -268,6 +284,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>-64%</td>
   <td>-70%</td>
   <td>-</td>
+  <th>kahan</th>
  </tr>
  <tr>
   <th>unroll4</th>
@@ -283,6 +300,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>50%</td>
   <td>19%</td>
   <td>2.037</td>
+  <th>unroll4</th>
  </tr>
  <tr>
   <th>unroll4_reorder1</th>
@@ -298,6 +316,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>92%</td>
   <td>51%</td>
   <td>0.768</td>
+  <th>unroll4_reorder1</th>
  </tr>
  <tr>
   <th>unroll4_shift</th>
@@ -313,6 +332,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>58%</td>
   <td>70%</td>
   <td>0.683</td>
+  <th>unroll4_shift</th>
  </tr>
  <tr>
   <th>unroll8</th>
@@ -328,6 +348,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>47%</td>
   <td>19%</td>
   <td>2.037</td>
+  <th>unroll8</th>
  </tr>
  <tr>
   <th>unroll8_reorder1</th>
@@ -343,6 +364,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>100%</td>
   <td>61%</td>
   <td>1.160</td>
+  <th>unroll8_reorder1</th>
  </tr>
  <tr>
   <th>unroll8_reorder2</th>
@@ -358,6 +380,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>127%</td>
   <td>83%</td>
   <td>0.833</td>
+  <th>unroll8_reorder2</th>
  </tr>
  <tr>
   <th>unroll8_shift</th>
@@ -373,6 +396,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>20%</td>
   <td>32%</td>
   <td>0.344</td>
+  <th>unroll8_shift</th>
  </tr>
  <tr>
   <th>unroll16</th>
@@ -388,6 +412,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>50%</td>
   <td>19%</td>
   <td>2.037</td>
+  <th>unroll16</th>
  </tr>
  <tr>
   <th>unroll16_reorder1</th>
@@ -403,6 +428,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>110%</td>
   <td>72%</td>
   <td>1.198</td>
+  <th>unroll16_reorder1</th>
  </tr>
  <tr>
   <th>unroll16_reorder2</th>
@@ -418,35 +444,34 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>90%</td>
   <td>85%</td>
   <td>2.277</td>
+  <th>unroll16_reorder2</th>
  </tr></tbody></table>
  
  ## Compiled with AVX option
  
- <table>
- <colgroup><col>
- <col>
- <col span="12">
- </colgroup><tbody><tr>
-  <td colspan="2" rowspan="2"></td>
-  <td colspan="2">g++ 5.4.0</td>
-  <td colspan="2">g++ 7.5.0</td>
-  <td colspan="2">g++ 9.3.0</td>
-  <td colspan="2">clang 11.0.3*</td>
-  <td colspan="2">msvc 19.26</td>
-  <td rowspan="2">Avg SpeedUp</td>
-  <td rowspan="2">MAE</td>
+<table>
+ <tbody><tr>
+  <th colspan="2" rowspan="2"></th>
+  <th colspan="2">g++ 5.4.0</th>
+  <th colspan="2">g++ 7.5.0</th>
+  <th colspan="2">g++ 9.3.0</th>
+  <th colspan="2">clang 11.0.3*</th>
+  <th colspan="2">msvc 19.26</th>
+  <th rowspan="2">Avg SpeedUp</th>
+  <th rowspan="2">MAE</th>
+  <th rowspan="2"></th>
  </tr>
  <tr>
-  <td>Time(sec)</td>
-  <td>SpeedUp</td>
-  <td>Time</td>
-  <td>SpeedUp</td>
-  <td>Time</td>
-  <td>SpeedUp</td>
-  <td>Time</td>
-  <td>SpeedUp</td>
-  <td>Time</td>
-  <td>SpeedUp</td>
+  <th>Time(sec)</th>
+  <th>SpeedUp</th>
+  <th>Time</th>
+  <th>SpeedUp</th>
+  <th>Time</th>
+  <th>SpeedUp</th>
+  <th>Time</th>
+  <th>SpeedUp</th>
+  <th>Time</th>
+  <th>SpeedUp</th>
  </tr>
  <tr>
   <th rowspan="15">float</th>
@@ -463,6 +488,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>0%</td>
   <td>0%</td>
   <td>2.037</td>
+  <th>simple(baseline)</th>
  </tr>
  <tr>
   <th>simple_double</th>
@@ -478,6 +504,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>-2%</td>
   <td>-17%</td>
   <td>-</td>
+  <th>simple_double</th>
  </tr>
  <tr>
   <th>avx</th>
@@ -493,6 +520,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>116%</td>
   <td>108%</td>
   <td>0.344</td>
+  <th>avx</th>
  </tr>
  <tr>
   <th>sse</th>
@@ -508,6 +536,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>147%</td>
   <td>159%</td>
   <td>0.683</td>
+  <th>sse</th>
  </tr>
  <tr>
   <th>kahan</th>
@@ -523,6 +552,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>-69%</td>
   <td>-73%</td>
   <td>0.000</td>
+  <th>kahan</th>
  </tr>
  <tr>
   <th>unroll4</th>
@@ -538,6 +568,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>0%</td>
   <td>-1%</td>
   <td>2.037</td>
+  <th>unroll4</th>
  </tr>
  <tr>
   <th>unroll4_reorder1</th>
@@ -553,6 +584,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>28%</td>
   <td>24%</td>
   <td>0.768</td>
+  <th>unroll4_reorder1</th>
  </tr>
  <tr>
   <th>unroll4_shift</th>
@@ -568,6 +600,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>133%</td>
   <td>76%</td>
   <td>0.683</td>
+  <th>unroll4_shift</th>
  </tr>
  <tr>
   <th>unroll8</th>
@@ -583,6 +616,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>21%</td>
   <td>9%</td>
   <td>2.037</td>
+  <th>unroll8</th>
  </tr>
  <tr>
   <th>unroll8_reorder1</th>
@@ -598,6 +632,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>57%</td>
   <td>43%</td>
   <td>1.160</td>
+  <th>unroll8_reorder1</th>
  </tr>
  <tr>
   <th>unroll8_reorder2</th>
@@ -613,6 +648,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>74%</td>
   <td>63%</td>
   <td>0.833</td>
+  <th>unroll8_reorder2</th>
  </tr>
  <tr>
   <th>unroll8_shift</th>
@@ -628,6 +664,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>97%</td>
   <td>42%</td>
   <td>0.344</td>
+  <th>unroll8_shift</th>
  </tr>
  <tr>
   <th>unroll16</th>
@@ -643,6 +680,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>16%</td>
   <td>7%</td>
   <td>2.037</td>
+  <th>unroll16</th>
  </tr>
  <tr>
   <th>unroll16_reorder1</th>
@@ -658,6 +696,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>61%</td>
   <td>53%</td>
   <td>1.198</td>
+  <th>unroll16_reorder1</th>
  </tr>
  <tr>
   <th>unroll16_reorder2</th>
@@ -673,6 +712,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>32%</td>
   <td>58%</td>
   <td>2.277</td>
+  <th>unroll16_reorder2</th>
  </tr>
  <tr>
   <th rowspan="12">double</th>
@@ -689,6 +729,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>0%</td>
   <td>0%</td>
   <td>2.037</td>
+  <th>simple(baseline)</th>
  </tr>
  <tr>
   <th>kahan</th>
@@ -704,6 +745,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>-61%</td>
   <td>-70%</td>
   <td>-</td>
+  <th>kahan</th>
  </tr>
  <tr>
   <th>unroll4</th>
@@ -719,6 +761,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>24%</td>
   <td>10%</td>
   <td>2.037</td>
+  <th>unroll4</th>
  </tr>
  <tr>
   <th>unroll4_reorder1</th>
@@ -734,6 +777,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>60%</td>
   <td>35%</td>
   <td>0.768</td>
+  <th>unroll4_reorder1</th>
  </tr>
  <tr>
   <th>unroll4_shift</th>
@@ -749,6 +793,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>194%</td>
   <td>98%</td>
   <td>0.683</td>
+  <th>unroll4_shift</th>
  </tr>
  <tr>
   <th>unroll8</th>
@@ -764,6 +809,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>49%</td>
   <td>18%</td>
   <td>2.037</td>
+  <th>unroll8</th>
  </tr>
  <tr>
   <th>unroll8_reorder1</th>
@@ -779,6 +825,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>83%</td>
   <td>54%</td>
   <td>1.160</td>
+  <th>unroll8_reorder1</th>
  </tr>
  <tr>
   <th>unroll8_reorder2</th>
@@ -794,6 +841,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>113%</td>
   <td>76%</td>
   <td>0.833</td>
+  <th>unroll8_reorder2</th>
  </tr>
  <tr>
   <th>unroll8_shift</th>
@@ -809,6 +857,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>146%</td>
   <td>61%</td>
   <td>0.344</td>
+  <th>unroll8_shift</th>
  </tr>
  <tr>
   <th>unroll16</th>
@@ -824,6 +873,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>49%</td>
   <td>19%</td>
   <td>2.037</td>
+  <th>unroll16</th>
  </tr>
  <tr>
   <th>unroll16_reorder1</th>
@@ -839,6 +889,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>106%</td>
   <td>66%</td>
   <td>1.198</td>
+  <th>unroll16_reorder1</th>
  </tr>
  <tr>
   <th>unroll16_reorder2</th>
@@ -854,4 +905,5 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>61%</td>
   <td>66%</td>
   <td>2.277</td>
+  <th>unroll16_reorder2</th>
  </tr></tbody></table>

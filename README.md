@@ -420,7 +420,7 @@ I've measured the elapsed time and the mean absolute error for the various metho
   <td>2.277</td>
  </tr></tbody></table>
  
- ## AVX
+ ## Compiled with AVX option
  
  <table>
  <colgroup><col>

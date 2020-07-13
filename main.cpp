@@ -116,6 +116,7 @@ void unroll4(_Ty* arr, int n)
 	for (int i = n4; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
@@ -138,6 +139,7 @@ void unroll4_reorder1(_Ty* arr, int n)
 	for (int i = n4; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
@@ -169,6 +171,7 @@ void unroll4_shift(_Ty* arr, int n)
 	for (int i = n4; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
@@ -193,6 +196,7 @@ void unroll8(_Ty* arr, int n)
 	for (int i = n8; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
@@ -223,6 +227,7 @@ void unroll8_reorder1(_Ty* arr, int n)
 	for (int i = n8; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
@@ -259,6 +264,7 @@ void unroll8_reorder2(_Ty* arr, int n)
 	for (int i = n8; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
@@ -308,6 +314,7 @@ void unroll8_shift(_Ty* arr, int n)
 	for (int i = n8; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
@@ -340,6 +347,7 @@ void unroll16(_Ty* arr, int n)
 	for (int i = n16; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
@@ -383,6 +391,7 @@ void unroll16_reorder1(_Ty* arr, int n)
 	for (int i = n16; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
@@ -437,6 +446,7 @@ void unroll16_reorder2(_Ty* arr, int n)
 	for (int i = n16; i < n; ++i)
 	{
 		arr[i] += acc;
+		acc = arr[i];
 	}
 }
 
